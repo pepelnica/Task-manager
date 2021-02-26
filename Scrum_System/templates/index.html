@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Django</title>
+</head>
+<body>
+<form method="POST" action="create_task/">
+    {% csrf_token %}
+    <table>
+        {{form}}
+    </table>
+    <input type="submit" value="Создать">
+</form>
+{% for task in tasks %}
+    {% if task.task_status == 'NOT_ACCEPTED' %}
+    <h1>Not accepted by</h1>
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+            <div style="border: 2px solid black">
+                <p>Task id: {{task.id}}</p>
+                <p>Title: {{task.task_title}}</p>
+                <p>Task: {{task.task_text}}</p>
+                <p>End: {{task.time_of_ending}}</p>
+                <p>Executor: {{task.task_executor}}</p>
+                <form method="POST" action=delete_task/{{task.id}}>
+                    {% csrf_token %}
+                    <input type="submit" value="Удалить">
+                </form>
+            </div>
+    {% elif task.task_status == 'ACCEPTED' %}
+            <h1>Accepted</h1>
+            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+            <div style="border: 2px solid black">
+                <p>Task id: {{task.id}}</p>
+                <p>Title: {{task.task_title}}</p>
+                <p>Task: {{task.task_text}}</p>
+                <p>End: {{task.time_of_ending}}</p>
+                <p>Executor: {{task.task_executor}}</p>
+                <form method="POST" action=delete_task/{{task.id}}>
+                    {% csrf_token %}
+                    <input type="submit" value="Удалить">
+                </form>
+            </div>
+    {% endif %}
+{% endfor %}
+    </div>
+    <div>
+
+    </div>
+</body>
+</html>
