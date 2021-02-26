@@ -12,40 +12,21 @@
     </table>
     <input type="submit" value="Создать">
 </form>
-{% for task in tasks %}
-    {% if task.task_status == 'NOT_ACCEPTED' %}
-    <h1>Not accepted by</h1>
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
-            <div style="border: 2px solid black">
-                <p>Task id: {{task.id}}</p>
-                <p>Title: {{task.task_title}}</p>
-                <p>Task: {{task.task_text}}</p>
-                <p>End: {{task.time_of_ending}}</p>
-                <p>Executor: {{task.task_executor}}</p>
-                <form method="POST" action=delete_task/{{task.id}}>
-                    {% csrf_token %}
-                    <input type="submit" value="Удалить">
-                </form>
-            </div>
-    {% elif task.task_status == 'ACCEPTED' %}
-            <h1>Accepted</h1>
-            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
-            <div style="border: 2px solid black">
-                <p>Task id: {{task.id}}</p>
-                <p>Title: {{task.task_title}}</p>
-                <p>Task: {{task.task_text}}</p>
-                <p>End: {{task.time_of_ending}}</p>
-                <p>Executor: {{task.task_executor}}</p>
-                <form method="POST" action=delete_task/{{task.id}}>
-                    {% csrf_token %}
-                    <input type="submit" value="Удалить">
-                </form>
-            </div>
-    {% endif %}
-{% endfor %}
+<h1>Not accepted</h1>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid black">
+    {% for task in not_accepted_tasks %}
+    <div style="border: 2px solid black">
+        <p>Task id: {{task.id}}</p>
+        <p>Title: {{task.task_title}}</p>
+        <p>Task: {{task.task_text}}</p>
+        <p>End: {{task.time_of_ending}}</p>
+        <p>Executor: {{task.task_executor}}</p>
+        <form method="POST" action=delete_task/{{task.id}}>
+            {% csrf_token %}
+            <input type="submit" value="Удалить">
+        </form>
     </div>
-    <div>
-
-    </div>
+    {% endfor %}
+</div>
 </body>
 </html>

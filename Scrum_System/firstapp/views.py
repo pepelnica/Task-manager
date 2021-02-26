@@ -9,15 +9,17 @@ def create_user(request):
 
 
 def boards(request):
-    not_accepted_tasks = Task.objects.get(task_status='NOT_ACCEPTED')
-    accepted_tasks = Task.objects.get(task_status='ACCEPTED')
-    in_progress_tasks = Task.objects.get(task_status='IN_PROGRESS')
-    completed_tasks = Task.objects.get(task_status='COMPLETED')
+    tasks = Task.objects.all()
+    not_accepted_tasks = Task.objects.filter(task_status='NOT_ACCEPTED')
+    accepted_tasks = Task.objects.filter(task_status='ACCEPTED')
+    in_progress_tasks = Task.objects.filter(task_status='IN_PROGRESS')
+    completed_tasks = Task.objects.filter(task_status='COMPLETED')
     task_create = task_create_form()
     return render(request, "index.html", {"not_accepted_tasks": not_accepted_tasks,
                                           "accepted_tasks": accepted_tasks,
-
-        ,"form": task_create})
+                                          "in_progress_tasks": in_progress_tasks,
+                                          "completed_tasks": completed_tasks,
+                                          "form": task_create,})
 
 def create_task(request):
     if request.method == "POST":
