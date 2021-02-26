@@ -19,7 +19,7 @@ from firstapp import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('register', views.create_user), #sfdffsdf
+    path('register', views.create_user), #ksksksksksksksskskssksk
     path('', views.boards),
     path('boards/<int:id>', views.boards),
     path('create_task/', views.create_task),
