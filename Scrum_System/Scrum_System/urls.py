@@ -24,4 +24,6 @@ urlpatterns = [
     path('boards/<int:id>', views.boards),
     path('create_task/', views.create_task),
     path('delete_task/<int:id>', views.delete_task),
+    path('status_change_up/<int:id>', views.status_change_up),
+    path('status_change_down/<int:id>', views.status_change_down),
 ]

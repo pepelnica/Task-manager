@@ -2,6 +2,8 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, HttpRes
 from .forms import task_create_form, user_create_form
 from .models import Task
 
+statuses = ["NOT_ACCEPTED", "ACCEPTED", "IN_PROGRESS", "COMPLETED"]
+
 def create_user(request):
     #if request.method == "POST":
     user_create = user_create_form()
@@ -9,7 +11,6 @@ def create_user(request):
 
 
 def boards(request):
-    tasks = Task.objects.all()
     not_accepted_tasks = Task.objects.filter(task_status='NOT_ACCEPTED')
     accepted_tasks = Task.objects.filter(task_status='ACCEPTED')
     in_progress_tasks = Task.objects.filter(task_status='IN_PROGRESS')
@@ -34,4 +35,20 @@ def create_task(request):
 def delete_task(request, id):
     task_ = Task.objects.get(id=id)
     task_.delete()
+    return HttpResponseRedirect("/")
+
+def status_change_up(request, id):
+    if request.method == "POST":
+        task_ = Task.objects.get(id=id)
+        old_status_id = statuses.index(task_.task_status)
+        task_.task_status = statuses[old_status_id+1]
+        task_.save()
+    return HttpResponseRedirect("/")
+
+def status_change_down(request, id):
+    if request.method == "POST":
+        task_ = Task.objects.get(id=id)
+        old_status_id = statuses.index(task_.task_status)
+        task_.task_status = statuses[old_status_id-1]
+        task_.save()
     return HttpResponseRedirect("/")
