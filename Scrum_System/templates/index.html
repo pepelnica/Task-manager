@@ -29,6 +29,9 @@
             {% csrf_token %}
             <input type="submit" value="->">
         </form>
+        <form action="edit_task/{{task.id}}">
+            <input type="submit" value="edit">
+        </form>
     </div>
     {% endfor %}
 </div>

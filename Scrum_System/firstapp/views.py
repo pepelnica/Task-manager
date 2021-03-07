@@ -1,4 +1,5 @@
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponseNotFound
 from .forms import task_create_form, user_create_form
 from .models import Task
 
@@ -20,7 +21,7 @@ def boards(request):
                                           "accepted_tasks": accepted_tasks,
                                           "in_progress_tasks": in_progress_tasks,
                                           "completed_tasks": completed_tasks,
-                                          "form": task_create,})
+                                          "form": task_create})
 
 def create_task(request):
     if request.method == "POST":
@@ -31,6 +32,24 @@ def create_task(request):
         task_.task_status = request.POST.get("status")
         task_.save()
     return HttpResponseRedirect("/")
+
+def edit_task(request, id):
+    try:
+        task_create = task_create_form()
+        task_ = Task.objects.get(id=id)
+        task_create.text = task_.task_text
+        task_create.title = task_.task_title
+        if request.method == "POST":
+            task_.task_title = request.POST.get("title")
+            task_.task_text = request.POST.get("text")
+            task_.time_of_ending = request.POST.get("end_of_task")
+            task_.task_status = request.POST.get("status")
+            task_.save()
+            return HttpResponseRedirect("/")
+        else:
+            return render(request, "task_edit.html", {"task": task_, "form": task_create})
+    except Task.DoesNotExist:
+        return HttpResponseNotFound("<h2>Task not found</h2>")
 
 def delete_task(request, id):
     task_ = Task.objects.get(id=id)
