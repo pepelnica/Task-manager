@@ -19,7 +19,6 @@ from firstapp import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path('register', views.create_user),
     path('', views.boards),
     path('boards/<int:id>', views.boards),
     path('create_task/', views.create_task),
@@ -27,4 +26,7 @@ urlpatterns = [
     path('status_change_up/<int:id>', views.status_change_up),
     path('status_change_down/<int:id>', views.status_change_down),
     path('edit_task/<int:id>', views.edit_task),
+    path('login/', views.authorization),
+    path('admin/', admin.site.urls),
+    path('registration/', views.registration),
 ]

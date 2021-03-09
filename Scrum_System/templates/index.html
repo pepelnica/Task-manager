@@ -12,99 +12,134 @@
     </table>
     <input type="submit" value="Создать">
 </form>
-<h1>Not accepted</h1>
-<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid black">
-    {% for task in not_accepted_tasks %}
-    <div style="border: 2px solid black">
-        <p>Task id: {{task.id}}</p>
-        <p>Title: {{task.task_title}}</p>
-        <p>Task: {{task.task_text}}</p>
-        <p>End: {{task.time_of_ending}}</p>
-        <p>Executor: {{task.task_executor}}</p>
-        <form method="POST" action=delete_task/{{task.id}}>
-            {% csrf_token %}
-            <input type="submit" value="Удалить">
-        </form>
-        <form method="POST" action="status_change_up/{{task.id}}">
-            {% csrf_token %}
-            <input type="submit" value="->">
-        </form>
-        <form action="edit_task/{{task.id}}">
-            <input type="submit" value="edit">
-        </form>
+<div class="big-daddy-div">
+    <div class="NotAccepted">
+        <h1>Not accepted</h1>
+        {% for task in not_accepted_tasks %}
+        <div style="border: 2px solid black">
+            <p>Task id: {{task.id}}</p>
+            <p>Title: {{task.task_title}}</p>
+            <p>Task: {{task.task_text}}</p>
+            <p>End: {{task.time_of_ending}}</p>
+            <p>Executor: {{task.task_executor}}</p>
+            <form method="POST" action=delete_task/{{task.id}}>
+                {% csrf_token %}
+                <input type="submit" value="Удалить">
+            </form>
+            <form method="POST" action="status_change_up/{{task.id}}">
+                {% csrf_token %}
+                <input type="submit" value="->">
+            </form>
+            <form action="edit_task/{{task.id}}">
+                <input type="submit" value="edit">
+            </form>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<h1>Accepted</h1>
-<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid black">
-    {% for task in accepted_tasks %}
-    <div style="border: 2px solid black">
-        <p>Task id: {{task.id}}</p>
-        <p>Title: {{task.task_title}}</p>
-        <p>Task: {{task.task_text}}</p>
-        <p>End: {{task.time_of_ending}}</p>
-        <p>Executor: {{task.task_executor}}</p>
-        <form method="POST" action=delete_task/{{task.id}}>
-            {% csrf_token %}
-            <input type="submit" value="Удалить">
-        </form>
-        <form method="POST" action="status_change_down/{{task.id}}">
-            {% csrf_token %}
-            <input type="submit" value="<-">
-        </form>
-        <form method="POST" action="status_change_up/{{task.id}}">
-            {% csrf_token %}
-            <input type="submit" value="->">
-        </form>
-    </div>
-    {% endfor %}
-</div>
 
-<h1>In progress</h1>
-<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid black">
-    {% for task in in_progress_tasks %}
-    <div style="border: 2px solid black">
-        <p>Task id: {{task.id}}</p>
-        <p>Title: {{task.task_title}}</p>
-        <p>Task: {{task.task_text}}</p>
-        <p>End: {{task.time_of_ending}}</p>
-        <p>Executor: {{task.task_executor}}</p>
-        <form method="POST" action=delete_task/{{task.id}}>
-            {% csrf_token %}
-            <input type="submit" value="Удалить">
-        </form>
-        <form method="POST" action="status_change_down/{{task.id}}">
-            {% csrf_token %}
-            <input type="submit" value="<-">
-        </form>
-        <form method="POST" action="status_change_up/{{task.id}}">
-            {% csrf_token %}
-            <input type="submit" value="->">
-        </form>
+    <div class="NotAccepted">
+        <h1>Accepted</h1>
+        {% for task in accepted_tasks %}
+        <div style="border: 2px solid black">
+            <p>Task id: {{task.id}}</p>
+            <p>Title: {{task.task_title}}</p>
+            <p>Task: {{task.task_text}}</p>
+            <p>End: {{task.time_of_ending}}</p>
+            <p>Executor: {{task.task_executor}}</p>
+            <form method="POST" action=delete_task/{{task.id}}>
+                {% csrf_token %}
+                <input type="submit" value="Удалить">
+            </form>
+            <form method="POST" action="status_change_down/{{task.id}}">
+                {% csrf_token %}
+                <input type="submit" value="<-">
+            </form>
+            <form method="POST" action="status_change_up/{{task.id}}">
+                {% csrf_token %}
+                <input type="submit" value="->">
+            </form>
+            <form action="edit_task/{{task.id}}">
+                <input type="submit" value="edit">
+            </form>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<h1>Completed</h1>
-<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid black">
-    {% for task in completed_tasks %}
-    <div style="border: 2px solid black">
-        <p>Task id: {{task.id}}</p>
-        <p>Title: {{task.task_title}}</p>
-        <p>Task: {{task.task_text}}</p>
-        <p>End: {{task.time_of_ending}}</p>
-        <p>Executor: {{task.task_executor}}</p>
-        <form method="POST" action=delete_task/{{task.id}}>
-            {% csrf_token %}
-            <input type="submit" value="Удалить">
-        </form>
-        <form method="POST" action="status_change_down/{{task.id}}">
-            {% csrf_token %}
-            <input type="submit" value="<-">
-        </form>
+
+    <div class="NotAccepted">
+        <h1>In progress</h1>
+        {% for task in in_progress_tasks %}
+        <div style="border: 2px solid black">
+            <p>Task id: {{task.id}}</p>
+            <p>Title: {{task.task_title}}</p>
+            <p>Task: {{task.task_text}}</p>
+            <p>End: {{task.time_of_ending}}</p>
+            <p>Executor: {{task.task_executor}}</p>
+            <form method="POST" action=delete_task/{{task.id}}>
+                {% csrf_token %}
+                <input type="submit" value="Удалить">
+            </form>
+            <form method="POST" action="status_change_down/{{task.id}}">
+                {% csrf_token %}
+                <input type="submit" value="<-">
+            </form>
+            <form method="POST" action="status_change_up/{{task.id}}">
+                {% csrf_token %}
+                <input type="submit" value="->">
+            </form>
+            <form action="edit_task/{{task.id}}">
+                <input type="submit" value="edit">
+            </form>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
+
+    <div class="NotAccepted">
+        <h1>Completed</h1>
+        {% for task in completed_tasks %}
+        <div style="border: 2px solid black">
+            <p>Task id: {{task.id}}</p>
+            <p>Title: {{task.task_title}}</p>
+            <p>Task: {{task.task_text}}</p>
+            <p>End: {{task.time_of_ending}}</p>
+            <p>Executor: {{task.task_executor}}</p>
+            <form method="POST" action=delete_task/{{task.id}}>
+                {% csrf_token %}
+                <input type="submit" value="Удалить">
+            </form>
+            <form method="POST" action="status_change_down/{{task.id}}">
+                {% csrf_token %}
+                <input type="submit" value="<-">
+            </form>
+            <form action="edit_task/{{task.id}}">
+                <input type="submit" value="edit">
+            </form>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 </body>
 </html>
+
+<style>
+    .NotAccepted{
+        margin: 5px;
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        border: 2px solid black
+    }
+    .NotAccepted div {
+        width: 100%;
+    }
+    .big-daddy-div {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: top;
+    }
+</style>

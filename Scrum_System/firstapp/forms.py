@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
 
 task_status_choices = (
         ('NOT_ACCEPTED', 'Not accepted'),
@@ -9,6 +8,12 @@ task_status_choices = (
         ('COMPLETED', 'Completed'),
 )
 
+
+class AuthForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
 class task_create_form(forms.Form):
     title = forms.CharField()
     text = forms.CharField(widget=forms.Textarea, max_length=100)
@@ -16,9 +21,11 @@ class task_create_form(forms.Form):
     #выпадающее окно с пользователями доски
     end_of_task = forms.DateField()
 
-class user_create_form(forms.Form):
-    password_1 = forms.CharField(label='Password',widget=forms.PasswordInput)
-    password_2 = forms.CharField(label='Repeat password',widget=forms.PasswordInput)
+
+class RegistrationForm(forms.ModelForm):
+
+    password_0 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password_1 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -26,6 +33,6 @@ class user_create_form(forms.Form):
 
     def clean_password2(self):
         cd = self.cleaned_data
-        if cd['password_1'] != cd['password_2']:
+        if cd['password_0'] != cd['password_1']:
             raise forms.ValidationError('Passwords don\'t match.')
-        return cd['password_2']
+        return cd['password_1']

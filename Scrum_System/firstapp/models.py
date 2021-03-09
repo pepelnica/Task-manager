@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Task(models.Model):
     task_title = models.CharField(max_length=20)
     task_text = models.CharField(max_length=100)
@@ -14,7 +15,7 @@ class Task(models.Model):
     task_status = models.CharField(choices=task_status_choices, default='NOT_ACCEPTED', max_length=20)
     #task_executors =
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+class User(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 # Create your models here.
