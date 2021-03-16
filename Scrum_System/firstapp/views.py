@@ -1,8 +1,9 @@
-from django.shortcuts import render, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponsePermanentRedirect, reverse
 from django.http import HttpResponseNotFound, HttpResponse
-from .forms import task_create_form, RegistrationForm, AuthForm
-from .models import Task
+from .forms import task_create_form, RegistrationForm, AuthForm, BoardCreate
+from .models import Task,  Account, Boards
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 statuses = ["NOT_ACCEPTED", "ACCEPTED", "IN_PROGRESS", "COMPLETED"]
 
@@ -16,7 +17,7 @@ def authorization(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponse("Аутентификация прошла успешно")
+                return HttpResponseRedirect("/main_page/")
             else:
                 return HttpResponse("Такого пользователя не существует")
         else:
@@ -30,13 +31,45 @@ def registration(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
+            new_account = Account()
             new_user = form.save(commit=False)
             new_user.set_password(form.cleaned_data["password_0"])
             new_user.save()
-            return render(request, "login.html", {"new_user": new_user})
+            new_account.user.add(new_user)
+            new_account.save()
+            return HttpResponseRedirect("/main_page", )
     else:
         form = RegistrationForm()
     return render(request, "registration.html", {"form": form})
+
+
+#def create_board(request):
+ #   if request.method == "POST":
+  #      board = BoardCreate(request.POST)
+   #     board.save()
+    #    return render(request, 'main_page.html')
+    #else:
+     #   _user = request.user
+      #  form = BoardCreate()
+       # print(_user.username)
+        #return render(request, "main_page.html", {"form": form, "user": _user.username})
+
+
+def main_page(request):
+    user = request.user
+    _form = BoardCreate()
+    return render(request, "main_page.html", {"user": user, "form": _form})
+
+
+def create_board(request):
+    if request.method == "POST":
+        board = Boards.objects.create(name=request.POST.get("name"))
+        board.save()
+        _user = request.user
+        user_father = Account.objects.get(id=_user.id)
+        user_father.boards.add(board)
+        #_user.boards.create(name=request.POST.get("name"))
+    return HttpResponseRedirect("/main_page")
 
 
 def boards(request):
@@ -51,6 +84,7 @@ def boards(request):
                                           "completed_tasks": completed_tasks,
                                           "form": task_create})
 
+
 def create_task(request):
     if request.method == "POST":
         task_ = Task()
@@ -60,6 +94,7 @@ def create_task(request):
         task_.task_status = request.POST.get("status")
         task_.save()
     return HttpResponseRedirect("/")
+
 
 def edit_task(request, id):
     try:
@@ -77,10 +112,12 @@ def edit_task(request, id):
     except Task.DoesNotExist:
         return HttpResponseNotFound("<h2>Task not found</h2>")
 
+
 def delete_task(request, id):
     task_ = Task.objects.get(id=id)
     task_.delete()
     return HttpResponseRedirect("/")
+
 
 def status_change_up(request, id):
     if request.method == "POST":
@@ -89,6 +126,7 @@ def status_change_up(request, id):
         task_.task_status = statuses[old_status_id+1]
         task_.save()
     return HttpResponseRedirect("/")
+
 
 def status_change_down(request, id):
     if request.method == "POST":

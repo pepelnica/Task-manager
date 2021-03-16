@@ -29,4 +29,6 @@ urlpatterns = [
     path('login/', views.authorization),
     path('admin/', admin.site.urls),
     path('registration/', views.registration),
+    path('main_page/', views.main_page),
+    path("main_page/create_board/", views.create_board),
 ]

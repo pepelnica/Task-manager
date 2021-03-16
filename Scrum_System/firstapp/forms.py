@@ -14,6 +14,10 @@ class AuthForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 
+class BoardCreate(forms.Form):
+    name = forms.CharField()
+
+
 class task_create_form(forms.Form):
     title = forms.CharField()
     text = forms.CharField(widget=forms.Textarea, max_length=100)
@@ -23,7 +27,6 @@ class task_create_form(forms.Form):
 
 
 class RegistrationForm(forms.ModelForm):
-
     password_0 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password_1 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 

@@ -11,9 +11,14 @@
         {{ form.as_p }}
         <div style="flex_direction: row;">
             <input type="submit" value="Login in">
-            <input type = "submit" value="Registration">
         </div>
     </form>
 </block>
+
+<form method="POST" action="/registration/">
+    {% csrf_token %}
+    <input type = "submit" value="Registration">
+</form>
+
 </body>
 </html>
