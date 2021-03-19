@@ -1,0 +1,11 @@
+{% block tools %}
+        <h1>Создать доску</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <table>
+                {{ form }}
+            </table>
+            <br>
+            <input type="submit" value="Create">
+        </form>
+    {% endblock tools %}

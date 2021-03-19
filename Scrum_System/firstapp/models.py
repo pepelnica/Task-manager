@@ -1,9 +1,14 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
+class Account(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    #boards = models.ManyToManyField(Boards)
 
 class Boards(models.Model):
     name = models.CharField(max_length=20)
+    users = models.ManyToManyField(Account)
 
 
 class Task(models.Model):
@@ -17,11 +22,4 @@ class Task(models.Model):
         ('COMPLETED', 'Completed'),
     )
     task_status = models.CharField(choices=task_status_choices, default='NOT_ACCEPTED', max_length=20)
-    task_parent = models.ForeignKey(Boards, on_delete=models.CASCADE, default=1)
-    #task_executors =
-
-
-class Account(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    boards = models.ManyToManyField(Boards)
-# Create your models here.
+    task_parent = models.ForeignKey(Boards, on_delete=models.CASCADE)

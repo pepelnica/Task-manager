@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Boards, Task
 
 task_status_choices = (
         ('NOT_ACCEPTED', 'Not accepted'),
@@ -14,8 +15,10 @@ class AuthForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 
-class BoardCreate(forms.Form):
-    name = forms.CharField()
+class BoardCreate(forms.ModelForm):
+    class Meta:
+        model = Boards
+        fields = ('name',)
 
 
 class task_create_form(forms.Form):
@@ -24,6 +27,11 @@ class task_create_form(forms.Form):
     status = forms.ChoiceField(choices=task_status_choices)
     #выпадающее окно с пользователями доски
     end_of_task = forms.DateField()
+
+class task_edit_form(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('task_title', 'task_text', 'time_of_ending',)
 
 
 class RegistrationForm(forms.ModelForm):
