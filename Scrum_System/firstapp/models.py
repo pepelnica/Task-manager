@@ -2,13 +2,14 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 
-class Account(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    #boards = models.ManyToManyField(Boards)
 
 class Boards(models.Model):
     name = models.CharField(max_length=20)
-    users = models.ManyToManyField(Account)
+
+
+class Account(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    boards = models.ManyToManyField(Boards)
 
 
 class Task(models.Model):

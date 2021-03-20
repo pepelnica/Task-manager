@@ -26,40 +26,51 @@ def registration(request):
 
 @login_required
 def main_page(request):
-    return render(request, "account/main_page.html", {"section": main_page})
+    boards = Account.objects.get(user=request.user).boards.all()
+    return render(request, "account/main_page.html", {"section": main_page, "boards": boards})
 
 
 @login_required
 def boards(request, id):
     board = Boards.objects.get(id=id)
-
     not_accepted_tasks = Task.objects.filter(task_status='NOT_ACCEPTED', task_parent = board)
     accepted_tasks = Task.objects.filter(task_status='ACCEPTED', task_parent = board)
     in_progress_tasks = Task.objects.filter(task_status='IN_PROGRESS', task_parent = board)
     completed_tasks = Task.objects.filter(task_status='COMPLETED', task_parent = board)
     task_create = task_create_form()
     return render(request, "board/board.html", {"not_accepted_tasks": not_accepted_tasks,
-                                          "accepted_tasks": accepted_tasks,
-                                          "in_progress_tasks": in_progress_tasks,
-                                          "completed_tasks": completed_tasks,
-                                          "form": task_create,
-                                          "board": board})
+                                                "accepted_tasks": accepted_tasks,
+                                                "in_progress_tasks": in_progress_tasks,
+                                                "completed_tasks": completed_tasks,
+                                                "form": task_create,
+                                                "board": board})
+
 
 @login_required
 def create_board(request):
+    boards = Account.objects.get(user=request.user).boards.all()
     if request.method == "POST":
         board = Boards() 
         board.name = request.POST.get("name")
         board.save()
-
         account = Account.objects.get(user=request.user)
-        board.users.add(account)
-        board.save()
+        account.boards.add(board)
 
-        return render(request, "account/main_page.html")
+        # другой вариант добавления
+        board.account_set.add(account)
+        account.save()
+        return redirect("/main_page/")
     else:
         form = BoardCreate()
         return render(request, "board/create_board.html", {"form": form})
+
+
+@login_required
+def delete_board(request, id):
+    board = Boards.objects.get(id=id)
+    board.account_set.remove(Account.objects.get(user=request.user))
+    board.delete()
+    return redirect("/main_page/")
 
 
 @login_required
@@ -71,11 +82,10 @@ def create_task(request, id):
         task_.task_text = request.POST.get("text")
         task_.time_of_ending = request.POST.get("end_of_task")
         task_.task_status = request.POST.get("status")
-        board.task_set.add(task_, bulk = False)
+        board.task_set.add(task_, bulk=False)
         task_.save()
         board.save()
-        return redirect("/account/main_page/board/" + str(board.id))
-
+        return redirect("/main_page/board/" + str(board.id))
 
 
 def edit_task(request, id):
@@ -84,18 +94,17 @@ def edit_task(request, id):
     if request.method == "POST":
         task = task_edit_form(request.POST, instance=task)
         task.save()
-        return redirect("/account/main_page/board/" + str(id_))
+        return redirect("/main_page/board/" + str(id_))
     else:
         form = task_edit_form(instance=task)
         return render(request, "task_edit.html", {"task": task, "form": form})
 
- 
 
 def delete_task(request, id):
     task_ = Task.objects.get(id=id)
     id_ = task_.task_parent.id
     task_.delete()
-    return redirect("/account/main_page/board/" + str(id_))
+    return redirect("/main_page/board/" + str(id_))
 
 
 def status_change_up(request, id):
@@ -105,7 +114,7 @@ def status_change_up(request, id):
         old_status_id = statuses.index(task_.task_status)
         task_.task_status = statuses[old_status_id+1]
         task_.save()
-    return redirect("/account/main_page/board/" + str(id_))
+    return redirect("/main_page/board/" + str(id_))
 
 
 def status_change_down(request, id):
@@ -115,17 +124,4 @@ def status_change_down(request, id):
         old_status_id = statuses.index(task_.task_status)
         task_.task_status = statuses[old_status_id-1]
         task_.save()
-    return redirect("/account/main_page/board/" + str(id_))
-
-
-@login_required
-def list_of_boards(request):
-    boards = Boards.objects.filter(users__user = request.user)
-    return render(request, "account/main_page.html", {"boards": boards})
- 
-
-
-
-
-
-
+    return redirect("/main_page/board/" + str(id_))

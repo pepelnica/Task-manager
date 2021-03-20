@@ -20,8 +20,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    #path('', views.boards),
-    path('', views.main_page, name='main_page'),
+    path('main_page/', views.main_page, name='main_page'),
     path('main_page/board/<int:id>', views.boards, name="board"),
     path('main_page/board/create_task/<int:id>', views.create_task),
     path('main_page/board/delete_task/<int:id>', views.delete_task),
@@ -30,7 +29,8 @@ urlpatterns = [
     path('main_page/board/edit_task/<int:id>', views.edit_task),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('registration/', views.registration, name = "registration"),
-    path("create_board/", views.create_board, name = 'create_board'),
-    path("main_page/", views.list_of_boards, name = "list_of_boards"),
+    path('registration/', views.registration, name="registration"),
+    path('create_board/', views.create_board, name='create_board'),
+    path('main_page/delete_board/<int:id>', views.delete_board, name='delete_board'),
+
 ]

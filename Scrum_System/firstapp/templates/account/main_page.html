@@ -5,13 +5,13 @@
 {% block content %}
     <h1>Главная страница</h1>
     <p><a href="{% url "create_board" %}">Добавить доску</a></p>
-    <p><a href="{% url "list_of_boards" %}">Открыть список досок</a></p>
 
    <table border="1">
         {% for board in boards %}
         <tr>
             <td>{{ board.name }}</td>
             <td><a href="board/{{ board.id }}">Перейти</a></td>
+            <td><a href="delete_board/{{ board.id }}">Delete</a></td>
         </tr>
         {% endfor %}
    </table>
